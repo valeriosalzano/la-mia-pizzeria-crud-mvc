@@ -1,0 +1,82 @@
+﻿@{
+    Layout = "Admin/_Layout";
+    ViewData["Title"] = "Home Page";
+}
+
+@section Style {
+    <link href="~/css/Admin/Index.css" rel="stylesheet" />
+}
+
+@{
+    string[] pizzaNames ={
+        "C# Supreme",
+        "DotNet Delight",
+        "Exceptional Pepperoni",
+        ".NET Margherita",
+        "Async Hawaiian",
+        "Garlic Bread Code",
+        "Polymorphic Pesto",
+        "Database Double Cheese",
+        "Crispy Compiler",
+        "DotNet Dessert",
+
+        
+    };
+    string[] pizzaDescriptions = {
+        "This pizza is so object-oriented,  even your taste buds will inherit deliciousness.",
+        "It's like a perfectly compiled symphony of flavors in every byte-sized bite.",
+        "Our pepperoni slices are as rare as a null reference exception in a well-written code.",
+        "Just like the .NET framework,  this pizza is a classic that never goes out of style.",
+        "Each bite is an asynchronous journey to a tropical paradise of taste.",
+        "A crunchy crust with a code snippet of garlic goodness baked right in.",
+        "This pizza adapts to your taste preferences like a true polymorphic masterpiece.",
+        "Double the cheese,  just like doubling down on a robust database architecture.",
+        "A compiler error never tasted this good - crispy and full of flavor.",
+        "Finish your coding session with a sweet slice of DotNet magic."
+    };
+    string[] pizzaPrices = {
+        "15.99",
+        "14.49",
+        "13.99",
+        "12.99",
+        "16.49",
+        "11.99",
+        "14.99",
+        "17.49",
+        "12.49",
+        "9.99",
+    };
+}
+
+
+
+<div class="container-fluid">
+    <div class="table-container border rounded-2 p-3 my-3 bg-white shadow overflow-scroll">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col" class="d-none d-md-table-cell">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < pizzaNames.Length; i++)
+                {
+                    <tr>
+                        <th scope="row">@(i+1)</th>
+                        <td><img class="w-100 object-fit-cover rounded-2" src="https://source.unsplash.com/random/200×200/?pizza,@i" alt="ceci n'est pas une pizza" loading="lazy"></td>
+                        <td class="fs-5">@pizzaNames[i]</td>
+                        <td class="text-nowrap">@pizzaPrices[i] &euro;</td>
+                        <td class="d-none d-md-table-cell">@pizzaDescriptions[i]</td>
+                    </tr>  
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
