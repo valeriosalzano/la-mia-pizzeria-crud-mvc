@@ -23,10 +23,21 @@ namespace la_mia_pizzeria.Controllers
             }
         }
 
-        // GET: PizzaController/Details/5
-        public ActionResult Details(int id)
+        // GET: PizzaController/Details/pizza-slug
+        public ActionResult Details(string slug)
         {
-            return View();
+            try
+            {
+                using (PizzeriaContext db = new PizzeriaContext())
+                {
+                    Pizza pizza = db.Pizzas.Where(pizza => pizza.Slug == slug).First();
+                    return View("Details", pizza);
+                }
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         // GET: PizzaController/Create
@@ -51,7 +62,7 @@ namespace la_mia_pizzeria.Controllers
         }
 
         // GET: PizzaController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string slug)
         {
             return View();
         }
@@ -59,7 +70,7 @@ namespace la_mia_pizzeria.Controllers
         // POST: PizzaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(string slug, IFormCollection collection)
         {
             try
             {
@@ -72,7 +83,7 @@ namespace la_mia_pizzeria.Controllers
         }
 
         // GET: PizzaController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string slug)
         {
             return View();
         }
@@ -80,7 +91,7 @@ namespace la_mia_pizzeria.Controllers
         // POST: PizzaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(string slug, IFormCollection collection)
         {
             try
             {

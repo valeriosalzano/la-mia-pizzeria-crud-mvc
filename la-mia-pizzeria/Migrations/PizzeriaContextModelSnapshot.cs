@@ -34,6 +34,10 @@ namespace la_mia_pizzeria.Migrations
                         .HasColumnType("VARCHAR(1000)")
                         .HasColumnName("description");
 
+                    b.Property<string>("ImgPath")
+                        .HasColumnType("VARCHAR(1000)")
+                        .HasColumnName("img_path");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("VARCHAR(100)")

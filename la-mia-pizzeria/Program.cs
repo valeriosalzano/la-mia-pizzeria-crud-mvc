@@ -28,7 +28,7 @@ namespace la_mia_pizzeria_static
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{slug?}");
 
             app.Run();
         }

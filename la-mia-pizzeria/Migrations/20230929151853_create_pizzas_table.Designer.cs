@@ -11,8 +11,8 @@ using la_mia_pizzeria.Database;
 namespace la_mia_pizzeria.Migrations
 {
     [DbContext(typeof(PizzeriaContext))]
-    [Migration("20230929141205_modify_pizzas_table")]
-    partial class modify_pizzas_table
+    [Migration("20230929151853_create_pizzas_table")]
+    partial class create_pizzas_table
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,10 @@ namespace la_mia_pizzeria.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("VARCHAR(1000)")
                         .HasColumnName("description");
+
+                    b.Property<string>("ImgPath")
+                        .HasColumnType("VARCHAR(1000)")
+                        .HasColumnName("img_path");
 
                     b.Property<string>("Name")
                         .IsRequired()

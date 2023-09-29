@@ -20,6 +20,7 @@ namespace la_mia_pizzeria.Models
         public decimal Price { get; set; }
         [Column(name: "description", TypeName = "VARCHAR(1000)"),DefaultValue("")]
         public string? Description { get; set; }
-
+        [Column(name: "img_path", TypeName = "VARCHAR(1000)"),DefaultValue("")]
+        public string? ImgPath { get; set; }
     }
 }

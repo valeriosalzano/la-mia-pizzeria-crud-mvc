@@ -14,8 +14,8 @@
         @if(Model.Count() == 0)
         {
             <p>No pizza found, add one!</p>
+            <a class="btn btn-outline-warning" href="@Url.Action("PopulateDb","Pizza")">Populate db</a>
             <small>for testing sake only, button to populate db! :)</small>
-            <a href="@Url.Action("PopulateDb","Pizza")"><button class="btn btn-outline-warning">Populate db</button></a>
         }
         else
         {
@@ -27,6 +27,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Price</th>
                         <th scope="col" class="d-none d-md-table-cell">Description</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,19 +35,20 @@
                     {
                         <tr>
                             <th scope="row">@pizza.PizzaId</th>
-                            <td><img class="w-100 object-fit-cover rounded-2" src="https://source.unsplash.com/random/200×200/?pizza,@pizza.PizzaId" alt="ceci n'est pas une pizza" loading="lazy"></td>
+                            <td><img class="w-100 object-fit-cover rounded-2" src="@(pizza.ImgPath == "" ? $"https://source.unsplash.com/random/200×200/?pizza,{pizza.PizzaId}": pizza.ImgPath)" alt="ceci n'est pas une pizza" loading="lazy"></td>
                             <td class="fs-5">@pizza.Name</td>
                             <td class="text-nowrap">@pizza.Price &euro;</td>
                             <td class="d-none d-md-table-cell">@pizza.Description</td>
+                            <td>
+                                <a href="@Url.Action("Details","Pizza", new {slug = pizza.Slug})" class="btn btn-outline-info">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                            </td>
                         </tr>  
                     }
                 </tbody>
             </table>
         }
-        
-        
-
-        
     </div>
 </div>
 
