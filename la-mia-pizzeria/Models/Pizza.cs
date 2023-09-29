@@ -18,9 +18,9 @@ namespace la_mia_pizzeria.Models
         public string? Slug { get; set; }
         [Column(name:"price", TypeName = "DECIMAL(5, 2)"), Required]
         public decimal Price { get; set; }
-        [Column(name: "description", TypeName = "VARCHAR(1000)"),DefaultValue("")]
-        public string? Description { get; set; }
-        [Column(name: "img_path", TypeName = "VARCHAR(1000)"),DefaultValue("")]
-        public string? ImgPath { get; set; }
+        [Column(name: "description", TypeName = "VARCHAR(1000)")]
+        public string? Description { get; set; } = "";
+        [Column(name: "img_path", TypeName = "VARCHAR(1000)")]
+        public string? ImgPath { get; set; } = "";
     }
 }

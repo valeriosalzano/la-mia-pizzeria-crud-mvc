@@ -7,19 +7,23 @@
 
 <div class="container-fluid">
     <div class="card">
-        <img src="@(Model.ImgPath == "" ? $"https://source.unsplash.com/random/200×200/?pizza,{Model.PizzaId}": Model.ImgPath)" class="card-img-top" alt="...">
+        <img src="@(Model.ImgPath == "" ? $"https://source.unsplash.com/random/500x200/?pizza,{Model.PizzaId}": Model.ImgPath)" class="card-img-top img-fluid" alt="ceci n'est past une pizza'">
       <div class="card-body">
         <h5 class="card-title">@Model.Name</h5>
         <p class="card-text">@Model.Description</p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"> <h6>&euro;</h6>@Model.Price</li>
-        <li class="list-group-item"><h6>Image Path: </h6>@Model.ImgPath</li>
-        <li class="list-group-item"><h6>Slug: </h6>@Model.Slug</li>
+        <li class="list-group-item"> <span class="fs-6">&euro;</span>@Model.Price</li>
+            @if(Model.ImgPath != "")
+            {
+                <li class="list-group-item"><span class="fs-6">Image Path: </span>@Model.ImgPath</li>
+            }
+            <li class="list-group-item"><span class="fs-6">Slug: </span>@Model.Slug</li>
       </ul>
       <div class="card-body">
-        <a href="#" class="card-link">Modify</a>
-        <a href="#" class="card-link">Delete</a>
+        <a class="btn btn-warning me-2" href="#">Modify</a>
+            <a class="btn btn-danger me-2" href="#">Delete</a>
+            <a class="btn btn-primary me-2" href="@Url.Action("Index","Pizza")">Return to Pizza List</a>
       </div>
     </div>
 </div>

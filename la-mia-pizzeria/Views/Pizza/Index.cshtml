@@ -35,7 +35,7 @@
                     {
                         <tr>
                             <th scope="row">@pizza.PizzaId</th>
-                            <td><img class="w-100 object-fit-cover rounded-2" src="@(pizza.ImgPath == "" ? $"https://source.unsplash.com/random/200×200/?pizza,{pizza.PizzaId}": pizza.ImgPath)" alt="ceci n'est pas une pizza" loading="lazy"></td>
+                            <td><img class="w-100 rounded-2" src="@(pizza.ImgPath == "" ? $"https://source.unsplash.com/random/200×200/?pizza,{pizza.PizzaId}": pizza.ImgPath)" alt="ceci n'est pas une pizza" loading="lazy"></td>
                             <td class="fs-5">@pizza.Name</td>
                             <td class="text-nowrap">@pizza.Price &euro;</td>
                             <td class="d-none d-md-table-cell">@pizza.Description</td>
