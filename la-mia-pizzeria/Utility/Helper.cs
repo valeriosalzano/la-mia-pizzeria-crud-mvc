@@ -46,5 +46,13 @@
             return data;
         }
 
+        public static string GetSlugFromString(string s)
+        {
+            //TODO function with REGEX
+            s = s.Replace("#", "");
+            s = s.Replace(".", "");
+            s = s.Replace("/", "");
+            return s.Replace(" ", "-").ToLower();
+        }
     }
 }

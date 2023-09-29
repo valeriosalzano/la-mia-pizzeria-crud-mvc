@@ -61,7 +61,7 @@ namespace la_mia_pizzeria.Database
                     {
                         try
                         {
-                            pizzasList.Add(new Pizza { Name = row[0], Price = decimal.Parse(row[1]), Description = row[2]  });
+                            pizzasList.Add(new Pizza { Name = row[0], Slug = Helper.GetSlugFromString(row[0]), Price = decimal.Parse(row[1]), Description = row[2]  });
                         }
                         catch (Exception ex)
                         {
