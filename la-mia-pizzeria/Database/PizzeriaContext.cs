@@ -1,15 +1,16 @@
 ﻿using la_mia_pizzeria.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
-namespace la_mia_pizzeria_static.Database
+namespace la_mia_pizzeria.Database
 {
     public class PizzeriaContext : DbContext
     {
         public DbSet<Pizza> Pizzas { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=EFVideogameContext;Integrated Security=True;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=PizzeriaContext;Integrated Security=True;TrustServerCertificate=True");
         }
+
     }
-}
 }
