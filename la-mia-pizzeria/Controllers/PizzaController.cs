@@ -1,5 +1,6 @@
 ﻿using la_mia_pizzeria.Database;
 using la_mia_pizzeria.Models;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,16 +32,18 @@ namespace la_mia_pizzeria.Controllers
                 using (PizzeriaContext db = new PizzeriaContext())
                 {
                     Pizza pizza = db.Pizzas.Where(pizza => pizza.Slug == slug).First();
-                    return View("Details", pizza);
+                        return View("Details", pizza);
+
                 }
             }
             catch
             {
-                return View("Error");
+                return RedirectToAction(nameof(Index));
             }
         }
 
         // GET: PizzaController/Create
+        [HttpGet]
         public ActionResult Create()
         {
             return View();

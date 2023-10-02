@@ -1,13 +1,17 @@
 ﻿@{
-    Layout = "Pizza/_Layout";
-    ViewData["Title"] = "Pizza Details";
+    Layout = "Admin/_Layout";
+}
+
+@section Style {
+    <link href="~/css/Admin/style.css" rel="stylesheet" />
 }
 
 @model Pizza;
+<h1 class="text-center display-3">@Model.Name Details</h1>
 
 <div class="container-fluid">
     <div class="card">
-        <img src="@(Model.ImgPath == "" ? $"https://source.unsplash.com/random/500x200/?pizza,{Model.PizzaId}": Model.ImgPath)" class="card-img-top img-fluid" alt="ceci n'est past une pizza'">
+        <img src="@Model.ImgPath" class="card-img-top img-fluid pizza-img" alt="ceci n'est past une pizza">
       <div class="card-body">
         <h5 class="card-title">@Model.Name</h5>
         <p class="card-text">@Model.Description</p>
@@ -20,7 +24,7 @@
             }
             <li class="list-group-item"><span class="fs-6">Slug: </span>@Model.Slug</li>
       </ul>
-      <div class="card-body">
+      <div class="card-body text-center">
         <a class="btn btn-warning me-2" href="#">Modify</a>
             <a class="btn btn-danger me-2" href="#">Delete</a>
             <a class="btn btn-primary me-2" href="@Url.Action("Index","Pizza")">Return to Pizza List</a>

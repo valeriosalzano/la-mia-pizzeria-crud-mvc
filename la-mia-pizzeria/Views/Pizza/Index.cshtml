@@ -1,56 +1,59 @@
 ﻿@{
-    Layout = "Pizza/_Layout";
-    ViewData["Title"] = "Home Page";
+    Layout = "Admin/_Layout";
 }
 
 @section Style {
-    <link href="~/css/Admin/Index.css" rel="stylesheet" />
+    <link href="~/css/Admin/style.css" rel="stylesheet" />
 }
 
 @model List<Pizza>
+<h1 class="text-center display-3">Pizza List</h1>
 
-<div class="container-fluid">
-    <div class="table-container border rounded-2 p-3 my-3 bg-white shadow overflow-scroll">
-        @if(Model.Count() == 0)
-        {
-            <p>No pizza found, add one!</p>
-            <a class="btn btn-outline-warning" href="@Url.Action("PopulateDb","Pizza")">Populate db</a>
-            <small>for testing sake only, button to populate db! :)</small>
-        }
-        else
-        {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Price</th>
-                        <th scope="col" class="d-none d-md-table-cell">Description</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach(Pizza pizza in Model)
-                    {
-                        <tr>
-                            <th scope="row">@pizza.PizzaId</th>
-                            <td><img class="w-100 rounded-2" src="@(pizza.ImgPath == "" ? $"https://source.unsplash.com/random/200×200/?pizza,{pizza.PizzaId}": pizza.ImgPath)" alt="ceci n'est pas une pizza" loading="lazy"></td>
-                            <td class="fs-5">@pizza.Name</td>
-                            <td class="text-nowrap">@pizza.Price &euro;</td>
-                            <td class="d-none d-md-table-cell">@pizza.Description</td>
-                            <td>
-                                <a href="@Url.Action("Details","Pizza", new {slug = pizza.Slug})" class="btn btn-outline-info">
-                                    <i class="fa-solid fa-eye"></i>
-                                </a>
-                            </td>
-                        </tr>  
-                    }
-                </tbody>
-            </table>
-        }
-    </div>
+<div class="text-end my-2">
+    <a class="btn btn-primary px-3" asp-action="create">Add a Pizza</a>
 </div>
+
+<div class="table-container border rounded-2 p-3 my-3 bg-white shadow overflow-scroll">
+    @if(Model.Count() == 0)
+    {
+        <p>No pizza found, add one!</p>
+        <a class="btn btn-outline-warning" href="@Url.Action("PopulateDb","Pizza")">Populate db</a>
+        <small>for developer testing sake only, push to populate db! :)</small>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col" class="d-none d-md-table-cell">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col" class="d-none d-md-table-cell">Description</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(Pizza pizza in Model)
+                {
+                    <tr>
+                        <th scope="row">@pizza.PizzaId</th>
+                        <td class="d-none d-md-table-cell"><img class="w-100 rounded-2 pizza-img" src="@pizza.ImgPath" alt="" loading="lazy"></td>
+                        <td>@pizza.Name</td>
+                        <td class="text-nowrap">@pizza.Price &euro;</td>
+                        <td class="d-none d-md-table-cell">@pizza.Description</td>
+                        <td>
+                            <a href="@Url.Action("Details","Pizza", new {slug = pizza.Slug})" class="btn btn-outline-info">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>  
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
 
 
 

@@ -1,0 +1,33 @@
+﻿/* HEADER */
+
+header .logo-img {
+    height: 100px;
+}
+
+/* CONTENT & SIDEBAR SIZE*/
+.sidebar, .content {
+    width: 100%;
+}
+
+@media all and (min-width: 576px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .content {
+        width: calc(100% - 200px);
+    }
+}
+
+/* MAIN */
+.pizza-img {
+    height: 150px;
+    aspect-ratio: 1/1;
+    background: #000000 url("https://source.unsplash.com/random/200×200/?pizza") center;
+    background-size: cover;
+}
+
+.card-img-top {
+    min-height: 200px;
+}
+

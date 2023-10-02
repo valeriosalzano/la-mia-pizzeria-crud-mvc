@@ -2,7 +2,26 @@
     Layout = "_Layout";
     ViewData["Title"] = "Home page";
 }
+@model List<Pizza>
 
 @section Style {
     <link href="~/css/Index.css" rel="stylesheet" />
  }
+
+<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+    @foreach (Pizza pizza in Model)
+    {
+        <div class="col">
+            <div class="card h-100">
+                <img src="..." class="card-img-top pizza-img" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title"> @pizza.Name</h5>
+                    <p class="card-text"> @pizza.Description</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-body-secondary">&euro; @pizza.Price</small>
+                </div>
+            </div>
+        </div>
+    }
+</div>
