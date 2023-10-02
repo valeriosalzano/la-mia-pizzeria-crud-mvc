@@ -56,7 +56,7 @@ namespace la_mia_pizzeria.Controllers
         public ActionResult Create(Pizza newPizza)
         {
             newPizza.Description ??= "";
-            newPizza.ImgPath ??= "";
+            newPizza.ImgPath ??= "/img/pizza-default.jpg";
             newPizza.Slug = Helper.GetSlugFromString(newPizza.Name);
 
             if (!ModelState.IsValid)
