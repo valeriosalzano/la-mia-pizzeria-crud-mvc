@@ -3,6 +3,7 @@ using la_mia_pizzeria.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using la_mia_pizzeria.Utility;
 
 namespace la_mia_pizzeria.Controllers
 {
@@ -52,15 +53,29 @@ namespace la_mia_pizzeria.Controllers
         // POST: PizzaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Pizza newPizza)
         {
+            newPizza.Description ??= "";
+            newPizza.ImgPath ??= "";
+            newPizza.Slug = Helper.GetSlugFromString(newPizza.Name);
+
+            if (!ModelState.IsValid)
+            {
+                RedirectToAction(nameof(Create),newPizza);
+            }
             try
             {
+                using (PizzeriaContext db = new PizzeriaContext())
+                {
+                    db.Add(newPizza);
+                    db.SaveChanges();
+
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(nameof(Create),newPizza);
             }
         }
 

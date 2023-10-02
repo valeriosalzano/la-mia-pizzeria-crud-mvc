@@ -16,7 +16,7 @@ namespace la_mia_pizzeria.Models
         public string? Name { get; set; }
         [Column(name: "slug", TypeName = "VARCHAR(100)"), Required]
         public string? Slug { get; set; }
-        [Column(name:"price", TypeName = "DECIMAL(5, 2)"), Required]
+        [Column(name:"price", TypeName = "DECIMAL(5, 2)"), Range(0.00,999.99),Required]
         public decimal Price { get; set; }
         [Column(name: "description", TypeName = "VARCHAR(1000)")]
         public string? Description { get; set; } = "";

@@ -1,7 +1,35 @@
 ﻿@{
     Layout = "Admin/_Layout";
 }
+@model Pizza
 
-<div>
-    <h1>Vista create</h1>
-</div>
+<h1 class="text-center display-3">New Pizza</h1>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input type="text" class="form-control" asp-for="Name">
+        <span class="invalid-feedback d-inline" asp-validation-for="Name"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Price</label>
+        <input type="number" class="form-control" asp-for="Price">
+        <span class="invalid-feedback d-inline" asp-validation-for="Price"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <textarea class="form-control" asp-for="Description" rows="3" placeholder="Write a pizza description..."></textarea>
+        <span class="invalid-feedback d-inline" asp-validation-for="Description"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ImgPath" class="form-label">Img Path</label>
+        <input type="text" class="form-control" asp-for="ImgPath">
+        <span class="invalid-feedback d-inline" asp-validation-for="ImgPath"></span>
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary px-3 w-100" type="submit">Submit</button>
+    </div>
+
+</form>

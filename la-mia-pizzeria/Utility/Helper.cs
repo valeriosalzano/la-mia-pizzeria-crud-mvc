@@ -1,4 +1,4 @@
-﻿namespace la_mia_pizzeria.Helpers
+﻿namespace la_mia_pizzeria.Utility
 {
     public static class Helper
     {
@@ -48,11 +48,16 @@
 
         public static string GetSlugFromString(string s)
         {
-            //TODO function with REGEX
-            s = s.Replace("#", "");
-            s = s.Replace(".", "");
-            s = s.Replace("/", "");
-            return s.Replace(" ", "-").ToLower();
+            if (s is null)
+                return "";
+            else
+            {
+                //TODO function with REGEX
+                s = s.Replace("#", "");
+                s = s.Replace(".", "");
+                s = s.Replace("/", "");
+                return s.Replace(" ", "-").ToLower();
+            }
         }
     }
 }
