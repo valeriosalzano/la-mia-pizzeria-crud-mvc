@@ -7,6 +7,7 @@ header .logo-img {
 /* CONTENT & SIDEBAR SIZE*/
 .sidebar, .content {
     width: 100%;
+    min-height: 80vh;
 }
 
 @media all and (min-width: 576px) {
@@ -20,6 +21,9 @@ header .logo-img {
 }
 
 /* MAIN */
+main {
+    min-height: calc(100% - (118px - 146px));
+}
 .pizza-img {
     object-fit: cover;
     height: 150px;
