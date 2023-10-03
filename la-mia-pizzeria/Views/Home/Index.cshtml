@@ -4,16 +4,12 @@
 }
 @model List<Pizza>
 
-@section Style {
-    <link href="~/css/Index.css" rel="stylesheet" />
- }
-
-<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+<div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
     @foreach (Pizza pizza in Model)
     {
         <div class="col">
             <div class="card h-100 shadow">
-                <img src="..." class="card-img-top pizza-img position-relative translate-middle-x start-50" alt="">
+                <img src="@pizza.ImgPath" class="card-img-top pizza-img" alt="">
                 <div class="card-body">
                     <h5 class="card-title"> @pizza.Name</h5>
                     <p class="card-text"> @pizza.Description</p>

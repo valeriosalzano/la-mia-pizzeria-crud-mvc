@@ -39,13 +39,23 @@
                     <tr>
                         <th scope="row">@pizza.PizzaId</th>
                         <td class="d-none d-md-table-cell"><img class="w-100 rounded-2 pizza-img" src="@pizza.ImgPath" alt="" loading="lazy"></td>
-                        <td>@pizza.Name</td>
+                        <td id="pizza-name">@pizza.Name</td>
                         <td class="text-nowrap">@pizza.Price &euro;</td>
                         <td class="d-none d-md-table-cell">@pizza.Description</td>
                         <td>
-                            <a href="@Url.Action("Details","Pizza", new {slug = pizza.Slug})" class="btn btn-outline-info">
+                            <a href="@Url.Action("Details","Pizza", new {slug = pizza.Slug})" class="btn btn-outline-info mb-1">
                                 <i class="fa-solid fa-eye"></i>
                             </a>
+                            <a href="@Url.Action("Edit","Pizza", new {slug = pizza.Slug})" class="btn btn-outline-warning mb-1">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <form asp-action="Delete" asp-route-slug="@pizza.Slug" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-outline-warning btn-sweet-delete">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                            
                         </td>
                     </tr>  
                 }
@@ -53,7 +63,10 @@
         </table>
     }
 </div>
+<partial name="Admin/Partials/_PizzaDeleteModal"/>
 
-
+@section Scripts {
+    <script src="~/js/sweet-delete.js"></script>
+}
 
 

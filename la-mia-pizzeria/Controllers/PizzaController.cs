@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using la_mia_pizzeria.Utility;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace la_mia_pizzeria.Controllers
 {
@@ -12,34 +13,24 @@ namespace la_mia_pizzeria.Controllers
         // GET: PizzaController
         public ActionResult Index()
         {
-            try
+            using (PizzeriaContext db = new PizzeriaContext())
             {
-                using(PizzeriaContext db = new PizzeriaContext())
-                {
-                    List<Pizza> pizzas = db.Pizzas.ToList<Pizza>();
-                    return View("Index", pizzas);
-                }
-            }catch
-            {
-                return View("Error");
+                List<Pizza> pizzas = db.Pizzas.ToList<Pizza>();
+                return View("Index", pizzas);
             }
         }
 
         // GET: PizzaController/Details/pizza-slug
         public ActionResult Details(string slug)
         {
-            try
+            using (PizzeriaContext db = new PizzeriaContext())
             {
-                using (PizzeriaContext db = new PizzeriaContext())
-                {
-                    Pizza pizza = db.Pizzas.Where(pizza => pizza.Slug == slug).First();
-                        return View("Details", pizza);
+                Pizza? pizza = db.Pizzas.Where(pizza => pizza.Slug == slug).FirstOrDefault();
 
-                }
-            }
-            catch
-            {
-                return RedirectToAction(nameof(Index));
+                if (pizza is null)
+                    return NotFound("Can't find the pizza.");
+                else
+                    return View("Details", pizza);
             }
         }
 
@@ -55,69 +46,80 @@ namespace la_mia_pizzeria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Pizza newPizza)
         {
-            newPizza.Description ??= "";
-            newPizza.ImgPath ??= "/img/pizza-default.jpg";
-            newPizza.Slug = Helper.GetSlugFromString(newPizza.Name);
+            PrepareForValidation(newPizza);
 
             if (!ModelState.IsValid)
             {
                 RedirectToAction(nameof(Create),newPizza);
             }
-            try
+            using (PizzeriaContext db = new PizzeriaContext())
             {
-                using (PizzeriaContext db = new PizzeriaContext())
-                {
-                    db.Add(newPizza);
-                    db.SaveChanges();
-
-                }
-                return RedirectToAction(nameof(Index));
+                db.Add(newPizza);
+                db.SaveChanges();
             }
-            catch
-            {
-                return View(nameof(Create),newPizza);
-            }
+            return RedirectToAction(nameof(Details),newPizza.Slug);
         }
 
-        // GET: PizzaController/Edit/5
+        // GET: PizzaController/Edit/pizza-slug
         public ActionResult Edit(string slug)
         {
-            return View();
+            using (PizzeriaContext db = new PizzeriaContext())
+            {
+                Pizza? pizza = db.Pizzas.Where(pizza => pizza.Slug == slug).FirstOrDefault();
+
+                if (pizza is null)
+                    return NotFound("Can't find the pizza.");
+                else
+                    return View(nameof(Edit), pizza);
+            }
         }
 
-        // POST: PizzaController/Edit/5
+        // POST: PizzaController/Edit/pizza-slug
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(string slug, IFormCollection collection)
+        public ActionResult Edit(string slug, Pizza modifiedPizza)
         {
-            try
+            PrepareForValidation(modifiedPizza);
+            if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                RedirectToAction(nameof(Edit), modifiedPizza);
             }
-            catch
+
+            using (PizzeriaContext db = new PizzeriaContext())
             {
-                return View();
+                try
+                {
+                    Pizza originalPizza = db.Pizzas.Where(pizza => pizza.Slug == slug).First();
+                    EntityEntry<Pizza> originalPizzaEntity = db.Entry(originalPizza);
+                    originalPizzaEntity.CurrentValues.SetValues(modifiedPizza);
+                    db.SaveChanges();
+                    return RedirectToAction(nameof(Details), originalPizza.Slug);
+                }
+                catch
+                {
+                    return NotFound("Can't find the desired pizza.");
+                }
             }
         }
 
-        // GET: PizzaController/Delete/5
+        // POST: PizzaController/Delete/pizza-slug
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(string slug)
         {
-            return View();
-        }
-
-        // POST: PizzaController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(string slug, IFormCollection collection)
-        {
-            try
+            using (PizzeriaContext db = new PizzeriaContext())
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                try
+                {
+                    Pizza deletedPizza = db.Pizzas.Where(pizza => pizza.Slug == slug).First();
+                    db.Remove(deletedPizza);
+                    db.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    return NotFound("Can't find the desired pizza.");
+                }
             }
         }
 
@@ -131,8 +133,15 @@ namespace la_mia_pizzeria.Controllers
             }
             catch
             {
-                return RedirectToAction(nameof(Index));
+                return View("Error");
             }
+        }
+
+        private void PrepareForValidation(Pizza pizza)
+        {
+            pizza.Description ??= "";
+            pizza.ImgPath ??= "/img/pizza-default.jpg";
+            pizza.Slug = Helper.GetSlugFromString(pizza.Name);
         }
     }
 }

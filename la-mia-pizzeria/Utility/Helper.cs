@@ -46,7 +46,7 @@
             return data;
         }
 
-        public static string GetSlugFromString(string s)
+        public static string GetSlugFromString(string? s)
         {
             if (s is null)
                 return "";

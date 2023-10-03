@@ -17,18 +17,18 @@ namespace la_mia_pizzeria.ValidationAttributes
 
                 if (wordsCount < Min)
                 {
-                    return new ValidationResult($"Field must contain {Min} words at least");
+                    return new ValidationResult($"The field must contain {Min} words at least.");
                 }
                 if (wordsCount > Max) 
                 {
-                    return new ValidationResult($"Field must contain no more than {Max} words");
+                    return new ValidationResult($"The field must contain less than {Max} words.");
                 }
 
                 return ValidationResult.Success;
 
             }
 
-            return new ValidationResult("Invalid field value");
+            return new ValidationResult("The field is required.");
 
 
         }

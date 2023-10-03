@@ -1,4 +1,4 @@
-﻿<header class="border-bottom bg-light">
+﻿<header class="border-bottom bg-light text-dark">
     <nav class="navbar navbar-expand-lg bg-body-tertiary px-3 py-1 container-fluid">
         <a class="navbar-brand d-inline-block" href="@Url.Action("Index","Home")">
             <img class="align-middle logo-img" src="~/img/logoSeaShark.png" alt="seashark logo" />
@@ -11,13 +11,16 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav text-center">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link active" aria-current="page" asp-action="Index">HOME</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Privacy</a>
+                    <a class="nav-link" href="#">PRIVACY</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">News</a>
+                    <a class="nav-link" href="#">NEWS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">LOG OUT</a>
                 </li>
             </ul>
         </div>
