@@ -57,7 +57,7 @@ namespace la_mia_pizzeria.Controllers
                 db.Add(newPizza);
                 db.SaveChanges();
             }
-            return RedirectToAction(nameof(Details),newPizza.Slug);
+            return View(nameof(Details),newPizza.Slug);
         }
 
         // GET: PizzaController/Edit/pizza-slug
@@ -93,7 +93,7 @@ namespace la_mia_pizzeria.Controllers
                     EntityEntry<Pizza> originalPizzaEntity = db.Entry(originalPizza);
                     originalPizzaEntity.CurrentValues.SetValues(modifiedPizza);
                     db.SaveChanges();
-                    return RedirectToAction(nameof(Details), originalPizza.Slug);
+                    return View(nameof(Details), originalPizza.Slug);
                 }
                 catch
                 {

@@ -24,10 +24,23 @@
             }
             <li class="list-group-item"><span class="fs-6">Slug: </span>@Model.Slug</li>
       </ul>
-      <div class="card-body text-center">
-        <a class="btn btn-warning me-2" href="#">Modify</a>
-            <a class="btn btn-danger me-2" href="#">Delete</a>
-            <a class="btn btn-primary me-2" href="@Url.Action("Index","Pizza")">Return to Pizza List</a>
+      <div class="card-body d-flex justify-content-center g-3">
+        <a href="@Url.Action("Edit","Pizza", new {slug = Model.Slug})" class="btn btn-warning px-3 me-2">
+            Modify <i class="fa-solid fa-pen-to-square"></i>
+        </a>
+        <form asp-action="Delete" asp-route-slug="@Model.Slug" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger btn-sweet-delete px-3 me-2">
+                Delete <i class="fa-solid fa-trash"></i>
+            </button>
+        </form>
+        <a class="btn btn-primary" href="@Url.Action("Index","Pizza")">Return to List</a>
       </div>
     </div>
 </div>
+
+<partial name="Admin/Partials/_PizzaDeleteModal" />
+
+@section Scripts {
+    <script src="~/js/sweet-delete.js"></script>
+}

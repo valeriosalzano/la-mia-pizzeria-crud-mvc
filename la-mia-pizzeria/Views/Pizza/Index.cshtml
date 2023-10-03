@@ -51,7 +51,7 @@
                             </a>
                             <form asp-action="Delete" asp-route-slug="@pizza.Slug" method="post">
                                 @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-outline-warning btn-sweet-delete">
+                                <button type="submit" class="btn btn-outline-danger btn-sweet-delete">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
