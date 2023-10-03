@@ -1,32 +1,34 @@
 ﻿using la_mia_pizzeria.Database;
+using la_mia_pizzeria.Interfaces;
 using la_mia_pizzeria.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace la_mia_pizzeria_static.Controllers
 {
+    
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ICustomLogger _logger;
+        private readonly PizzeriaContext _database;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ICustomLogger logger, PizzeriaContext db)
         {
             _logger = logger;
+            _database = db;
         }
 
         public IActionResult Index()
         {
             try
             {
-                using (PizzeriaContext db = new PizzeriaContext())
-                {
-                    List<Pizza> pizzas = db.Pizzas.ToList<Pizza>();
-                    return View("Index", pizzas);
-                }
+                List<Pizza> pizzas = _database.Pizzas.ToList<Pizza>();
+                return View("Index", pizzas);
             }
             catch
             {
-                return View("Error");
+                _logger.WriteLog("Catching exception at Home>Index");
+                return NotFound();
             }
         }
 

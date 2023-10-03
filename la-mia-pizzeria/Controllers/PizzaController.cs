@@ -5,32 +5,54 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using la_mia_pizzeria.Utility;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using la_mia_pizzeria.Interfaces;
 
 namespace la_mia_pizzeria.Controllers
 {
     public class PizzaController : Controller
     {
+        private readonly ICustomLogger _logger;
+        private readonly PizzeriaContext _database;
+
+        public PizzaController(ICustomLogger logger, PizzeriaContext db)
+        {
+            _logger = logger;
+            _database = db;
+        }
         // GET: PizzaController
         public ActionResult Index()
         {
-            using (PizzeriaContext db = new PizzeriaContext())
+            try
             {
-                List<Pizza> pizzas = db.Pizzas.ToList<Pizza>();
+                List<Pizza> pizzas = _database.Pizzas.ToList<Pizza>();
                 return View("Index", pizzas);
+            }
+            catch
+            {
+                _logger.WriteLog("Catching exception at Pizza>Index");
+                return NotFound();
             }
         }
 
         // GET: PizzaController/Details/pizza-slug
         public ActionResult Details(string slug)
         {
-            using (PizzeriaContext db = new PizzeriaContext())
+            try
             {
-                Pizza? pizza = db.Pizzas.Where(pizza => pizza.Slug == slug).FirstOrDefault();
+                Pizza? pizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).FirstOrDefault();
 
                 if (pizza is null)
+                {
+                    _logger.WriteLog($"Catching a null reference at Pizza>Details>{slug}");
                     return NotFound("Can't find the pizza.");
+                }
                 else
                     return View("Details", pizza);
+            }
+            catch
+            {
+                _logger.WriteLog($"Catching exception at Pizza>Details>{slug}");
+                return NotFound();
             }
         }
 
@@ -46,31 +68,44 @@ namespace la_mia_pizzeria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Pizza newPizza)
         {
-            PrepareForValidation(newPizza);
+            try
+            {
+                PrepareForValidation(newPizza);
 
-            if (!ModelState.IsValid)
-            {
-                RedirectToAction(nameof(Create),newPizza);
+                if (!ModelState.IsValid)
+                {
+                    RedirectToAction(nameof(Create),newPizza);
+                }
+                _database.Add(newPizza);
+                _database.SaveChanges();
+                return View(nameof(Details),newPizza.Slug);
             }
-            using (PizzeriaContext db = new PizzeriaContext())
+            catch
             {
-                db.Add(newPizza);
-                db.SaveChanges();
+                _logger.WriteLog($"Catching exception at Pizza>Create");
+                return NotFound();
             }
-            return View(nameof(Details),newPizza.Slug);
         }
 
         // GET: PizzaController/Edit/pizza-slug
         public ActionResult Edit(string slug)
         {
-            using (PizzeriaContext db = new PizzeriaContext())
+            try
             {
-                Pizza? pizza = db.Pizzas.Where(pizza => pizza.Slug == slug).FirstOrDefault();
+                Pizza? pizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).FirstOrDefault();
 
                 if (pizza is null)
+                {
+                    _logger.WriteLog($"Catching a null reference at Pizza>Edit>{slug}");
                     return NotFound("Can't find the pizza.");
+                }
                 else
                     return View(nameof(Edit), pizza);
+            }
+            catch
+            {
+                _logger.WriteLog($"Catching exception at GET Pizza>Edit{slug}");
+                return NotFound();
             }
         }
 
@@ -79,27 +114,25 @@ namespace la_mia_pizzeria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(string slug, Pizza modifiedPizza)
         {
-            PrepareForValidation(modifiedPizza);
-            if (!ModelState.IsValid)
+            try
             {
-                RedirectToAction(nameof(Edit), modifiedPizza);
+                PrepareForValidation(modifiedPizza);
+                if (!ModelState.IsValid)
+                {
+                    RedirectToAction(nameof(Edit), modifiedPizza);
+                }
+                Pizza originalPizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).First();
+                EntityEntry<Pizza> originalPizzaEntity = _database.Entry(originalPizza);
+                originalPizzaEntity.CurrentValues.SetValues(modifiedPizza);
+                _database.SaveChanges();
+                return View(nameof(Details), originalPizza.Slug);
             }
-
-            using (PizzeriaContext db = new PizzeriaContext())
+            catch
             {
-                try
-                {
-                    Pizza originalPizza = db.Pizzas.Where(pizza => pizza.Slug == slug).First();
-                    EntityEntry<Pizza> originalPizzaEntity = db.Entry(originalPizza);
-                    originalPizzaEntity.CurrentValues.SetValues(modifiedPizza);
-                    db.SaveChanges();
-                    return View(nameof(Details), originalPizza.Slug);
-                }
-                catch
-                {
-                    return NotFound("Can't find the desired pizza.");
-                }
+                _logger.WriteLog($"Catching exception at POST Pizza>Edit>{slug}");
+                return NotFound();
             }
+            
         }
 
         // POST: PizzaController/Delete/pizza-slug
@@ -107,19 +140,17 @@ namespace la_mia_pizzeria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(string slug)
         {
-            using (PizzeriaContext db = new PizzeriaContext())
+            try
             {
-                try
-                {
-                    Pizza deletedPizza = db.Pizzas.Where(pizza => pizza.Slug == slug).First();
-                    db.Remove(deletedPizza);
-                    db.SaveChanges();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch
-                {
-                    return NotFound("Can't find the desired pizza.");
-                }
+                Pizza deletedPizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).First();
+                _database.Remove(deletedPizza);
+                _database.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                _logger.WriteLog($"Catching exception at Pizza>Delete>{slug}");
+                return NotFound("Can't find the desired pizza.");
             }
         }
 
