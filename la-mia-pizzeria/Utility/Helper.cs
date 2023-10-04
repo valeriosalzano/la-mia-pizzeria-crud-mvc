@@ -11,10 +11,8 @@
             try
             {
                 StreamReader file = File.OpenText(filePath);
-
                 try
                 {
-
                     while (!file.EndOfStream)
                     {
                         string? row = file.ReadLine();
@@ -24,25 +22,22 @@
                             data.Add(columns);
                         }
                     }
-
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    Console.WriteLine("Errore durante la lettura del file");
+                    Console.WriteLine("Error while reading file.");
                 }
                 finally
                 {
                     file.Close();
                 }
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                Console.WriteLine("Errore durante l'apertura del file.");
+                Console.WriteLine("Error while opening file.");
             }
-
             return data;
         }
 
@@ -56,6 +51,7 @@
                 s = s.Replace("#", "");
                 s = s.Replace(".", "");
                 s = s.Replace("/", "");
+                s = s.Replace("\\", "");
                 return s.Replace(" ", "-").ToLower();
             }
         }

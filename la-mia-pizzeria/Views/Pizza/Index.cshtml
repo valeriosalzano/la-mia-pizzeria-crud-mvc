@@ -2,10 +2,6 @@
     Layout = "Admin/_Layout";
 }
 
-@section Style {
-    <link href="~/css/Admin/style.css" rel="stylesheet" />
-}
-
 @model List<Pizza>
 <h1 class="text-center display-3">Pizza List</h1>
 
@@ -26,7 +22,7 @@
             <thead>
                 <tr>
                     <th scope="col">ID</th>
-                    <th scope="col" class="d-none d-md-table-cell">Image</th>
+                    <th scope="col" class="d-none d-sm-table-cell">Image</th>
                     <th scope="col">Name</th>
                     <th scope="col">Price</th>
                     <th scope="col" class="d-none d-md-table-cell">Description</th>
@@ -36,9 +32,9 @@
             <tbody>
                 @foreach(Pizza pizza in Model)
                 {
-                    <tr>
+                    <tr class="wrapper">
                         <th scope="row">@pizza.PizzaId</th>
-                        <td class="d-none d-md-table-cell"><img class="w-100 rounded-2 pizza-img" src="@pizza.ImgPath" alt="" loading="lazy"></td>
+                        <td class="d-none d-sm-table-cell"><img class="w-100 rounded-2 pizza-img" src="@pizza.ImgPath" alt="" loading="lazy"></td>
                         <td id="pizza-name">@pizza.Name</td>
                         <td class="text-nowrap">@pizza.Price &euro;</td>
                         <td class="d-none d-md-table-cell">@pizza.Description</td>

@@ -1,22 +1,39 @@
-﻿@model Pizza
+﻿@model PizzaFormModel
 
 <div class="mb-3">
-    <label asp-for="Name" class="form-label">Name</label>
-    <input type="text" class="form-control" asp-for="Name">
-    <span class="invalid-feedback d-inline" asp-validation-for="Name"></span>
+    <label asp-for="Pizza.Name" class="form-label">Name</label>
+    <input type="text" class="form-control" asp-for="Pizza.Name">
+    <span class="invalid-feedback d-inline" asp-validation-for="Pizza.Name"></span>
+    <span class="invalid-feedback d-inline" asp-validation-for="Pizza.Slug"></span>
 </div>
 <div class="mb-3">
-    <label asp-for="Price" class="form-label">Price</label>
-    <input type="number" step="0.01" class="form-control" asp-for="Price">
-    <span class="invalid-feedback d-inline" asp-validation-for="Price"></span>
+    <label asp-for="Pizza.Price" class="form-label">Price</label>
+    <input type="number" step="0.01" class="form-control" asp-for="Pizza.Price">
+    <span class="invalid-feedback d-inline" asp-validation-for="Pizza.Price"></span>
 </div>
 <div class="mb-3">
-    <label asp-for="Description" class="form-label">Description</label>
-    <textarea class="form-control" asp-for="Description" rows="3" placeholder="Write a pizza description..."></textarea>
-    <span class="invalid-feedback d-inline" asp-validation-for="Description"></span>
+    <label asp-for="Pizza.Price" class="form-label">Price</label>
+    <select asp-for="Pizza.CategoryId" rows="10" class="w-100">
+        @foreach (Category category in Model.Categories)
+        {
+            @if (Model.Pizza.CategoryId == category.CategoryId)
+            {
+                <option selected > @category.Name </option>
+            }
+            else
+            {
+                <option > @category.Name </option>
+            }
+        }
+    </select>
 </div>
 <div class="mb-3">
-    <label asp-for="ImgPath" class="form-label">Image Path</label>
-    <input type="text" class="form-control" asp-for="ImgPath">
-    <span class="invalid-feedback d-inline" asp-validation-for="ImgPath"></span>
+    <label asp-for="Pizza.Description" class="form-label">Description</label>
+    <textarea class="form-control" asp-for="Pizza.Description" rows="3" placeholder="Write a pizza description..."></textarea>
+    <span class="invalid-feedback d-inline" asp-validation-for="Pizza.Description"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Pizza.ImgPath" class="form-label">Image Path</label>
+    <input type="text" class="form-control" asp-for="Pizza.ImgPath">
+    <span class="invalid-feedback d-inline" asp-validation-for="Pizza.ImgPath"></span>
 </div>

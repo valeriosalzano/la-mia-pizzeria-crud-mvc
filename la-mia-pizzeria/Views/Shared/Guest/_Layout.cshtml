@@ -6,17 +6,17 @@
     <link rel="icon" type="image/x-icon" href="/img/logoSeaShark.ico">
     <title>@ViewData["Title"] - Pizzeria SeaShark</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styleGuest.css" asp-append-version="true" />
     @RenderSection("Style", required: false)
 </head>
 <body>
-    <partial name="Partials/_Header" />
+    <partial name="Guest/Partials/_Header" />
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-    <partial name="Partials/_Footer" />
+    <partial name="Guest/Partials/_Footer" />
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

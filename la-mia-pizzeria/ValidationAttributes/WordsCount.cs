@@ -8,29 +8,17 @@ namespace la_mia_pizzeria.ValidationAttributes
         public int Max { get; set; } = int.MaxValue;
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            
+            value ??= "";
+            string parsedValue = (string)value;
+            int wordsCount = parsedValue.Trim().Split(" ").Length;
 
-            if (value is string)
-            {
-                string input = (string)value ?? "";
-                int wordsCount = input.Trim().Split(" ").Length;
+            if (wordsCount < Min)
+                return new ValidationResult($"The field must contain {Min} words at least.");
 
-                if (wordsCount < Min)
-                {
-                    return new ValidationResult($"The field must contain {Min} words at least.");
-                }
-                if (wordsCount > Max) 
-                {
-                    return new ValidationResult($"The field must contain less than {Max} words.");
-                }
+            if (wordsCount > Max) 
+                return new ValidationResult($"The field must contain less than {Max} words.");
 
-                return ValidationResult.Success;
-
-            }
-
-            return new ValidationResult("The field is required.");
-
-
+            return ValidationResult.Success;
         }
     }
 }

@@ -2,10 +2,11 @@
 using la_mia_pizzeria.Models;
 using System.Net;
 using System.Reflection.Metadata;
+using System.Diagnostics;
 
 namespace la_mia_pizzeria.Database
 {
-    public static class DataSeederContext
+    public static class DataSeeder
     {
         public static void PopulateDb()
         {
@@ -16,7 +17,6 @@ namespace la_mia_pizzeria.Database
                 int testPizza = db.Pizzas.Count();
                 if (testPizza == 0)
                 {
-                    Console.WriteLine("pizzas count 0");
                     // GET FILE CONTENT
                     string filePath = Path.GetFullPath(@"./Database/Seeder/pizzas.csv");
                     List<string[]> fileContent = Helper.GetCSVContent(filePath, ";");
@@ -26,7 +26,7 @@ namespace la_mia_pizzeria.Database
 
                     foreach(Pizza pizza in pizzasList)
                     {
-                        Console.WriteLine("Aggiungo la pizza " + pizza.Name);
+                        Debug.WriteLine($"Adding {pizza.Name} pizza.");
                         try
                         {
                             db.Add(pizza);
@@ -34,8 +34,8 @@ namespace la_mia_pizzeria.Database
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(ex.Message);
-                            Console.WriteLine(ex.InnerException);
+                            Debug.WriteLine(ex.Message);
+                            Debug.WriteLine(ex.InnerException);
                         }
                     }
                 }
@@ -44,7 +44,7 @@ namespace la_mia_pizzeria.Database
             }
         }
 
-        private static List<Pizza> GetPizzasFromFile(List<string[]> fileContent)
+        public static List<Pizza> GetPizzasFromFile(List<string[]> fileContent)
         {
             List<Pizza> pizzasList = new List<Pizza>();
 
@@ -55,7 +55,7 @@ namespace la_mia_pizzeria.Database
                 {
                     if (row.Length != 3)
                     {
-                        Console.WriteLine("Rilevata riga non formattata correttamente. Riga " + rowCounter);
+                        Debug.WriteLine("Wrong format. Row " + rowCounter);
                     }
                     else
                     {
@@ -65,10 +65,9 @@ namespace la_mia_pizzeria.Database
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"Impossibile creare una pizza con i dati della riga {rowCounter}");
-                            Console.WriteLine(ex.Message);
+                            Debug.WriteLine($"Could not create a pizza with row {rowCounter} data.");
+                            Debug.WriteLine(ex.Message);
                         }
-
                     }
                 }
                 rowCounter++;

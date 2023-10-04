@@ -5,9 +5,10 @@
 
 <h1 class="text-center display-3">Edit Pizza</h1>
 
-<form asp-action="Create" method="post">
+<form asp-action="Edit" method="post">
     @Html.AntiForgeryToken()
 
+    <input type="hidden" asp-for="PizzaId">
     <partial name="Admin/Partials/_PizzaFields" model="Model"/>
 
     <div class="text-center">

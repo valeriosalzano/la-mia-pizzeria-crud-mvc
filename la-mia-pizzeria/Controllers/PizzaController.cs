@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using la_mia_pizzeria.Utility;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using la_mia_pizzeria.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer.Server;
 
 namespace la_mia_pizzeria.Controllers
 {
@@ -39,7 +41,7 @@ namespace la_mia_pizzeria.Controllers
         {
             try
             {
-                Pizza? pizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).FirstOrDefault();
+                Pizza? pizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).Include("Category").FirstOrDefault();
 
                 if (pizza is null)
                 {
@@ -60,25 +62,29 @@ namespace la_mia_pizzeria.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            List<Category> categories = _database.Categories.ToList();
+
+            PizzaFormModel model = new PizzaFormModel { Pizza = new Pizza(), Categories = categories };
+            return View("Create", model);
         }
 
         // POST: PizzaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Pizza newPizza)
+        public ActionResult Create(PizzaFormModel formData)
         {
             try
             {
-                PrepareForValidation(newPizza);
-
-                if (!ModelState.IsValid)
+                ModelState.Clear();
+                PrepareForValidation(formData.Pizza);
+                if (!TryValidateModel(formData))
                 {
-                    RedirectToAction(nameof(Create),newPizza);
+                    PrepareFormModel(formData);
+                    return View(nameof(Create), formData);
                 }
-                _database.Add(newPizza);
+                _database.Add(formData.Pizza);
                 _database.SaveChanges();
-                return View(nameof(Details),newPizza.Slug);
+                return RedirectToAction(nameof(Details), new { slug = formData.Pizza.Slug });
             }
             catch
             {
@@ -100,7 +106,7 @@ namespace la_mia_pizzeria.Controllers
                     return NotFound("Can't find the pizza.");
                 }
                 else
-                    return View(nameof(Edit), pizza);
+                    return View(nameof(Edit),pizza);
             }
             catch
             {
@@ -112,20 +118,22 @@ namespace la_mia_pizzeria.Controllers
         // POST: PizzaController/Edit/pizza-slug
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(string slug, Pizza modifiedPizza)
+        public ActionResult Edit(string slug, PizzaFormModel formData)
         {
             try
             {
-                PrepareForValidation(modifiedPizza);
-                if (!ModelState.IsValid)
+                ModelState.Clear();
+                PrepareForValidation(formData.Pizza);
+                if (!TryValidateModel(formData))
                 {
-                    RedirectToAction(nameof(Edit), modifiedPizza);
+                    PrepareFormModel(formData);
+                    return View(nameof(Edit), formData);
                 }
                 Pizza originalPizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).First();
                 EntityEntry<Pizza> originalPizzaEntity = _database.Entry(originalPizza);
-                originalPizzaEntity.CurrentValues.SetValues(modifiedPizza);
+                originalPizzaEntity.CurrentValues.SetValues(formData);
                 _database.SaveChanges();
-                return View(nameof(Details), originalPizza.Slug);
+                return RedirectToAction(nameof(Details), new {slug = formData.Pizza.Slug});
             }
             catch
             {
@@ -159,7 +167,7 @@ namespace la_mia_pizzeria.Controllers
         {
             try
             {
-                DataSeederContext.PopulateDb();
+                DataSeeder.PopulateDb();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -171,8 +179,13 @@ namespace la_mia_pizzeria.Controllers
         private void PrepareForValidation(Pizza pizza)
         {
             pizza.Description ??= "";
-            pizza.ImgPath ??= "/img/pizza-default.jpg";
+            pizza.ImgPath ??= "";
             pizza.Slug = Helper.GetSlugFromString(pizza.Name);
+        }
+        private void PrepareFormModel(PizzaFormModel formData)
+        {
+            List<Category> categories = _database.Categories.ToList();
+            formData.Categories = categories;
         }
     }
 }

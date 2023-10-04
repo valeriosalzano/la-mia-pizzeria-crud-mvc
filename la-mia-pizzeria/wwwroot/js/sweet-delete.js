@@ -5,7 +5,7 @@ sweetDeleteBtns.forEach(btn => {
     btn.addEventListener('click', event => {
         event.preventDefault();
 
-        const title = btn.closest("tr").querySelector("#pizza-name").innerHTML;
+        const title = btn.closest(".wrapper").querySelector("#pizza-name").innerHTML;
 
         sweetDeleteModal.querySelector("#modal-title").innerHTML = title;
         sweetDeleteModal.classList.remove('d-none');

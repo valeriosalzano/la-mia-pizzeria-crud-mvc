@@ -2,27 +2,21 @@
     Layout = "Admin/_Layout";
 }
 
-@section Style {
-    <link href="~/css/Admin/style.css" rel="stylesheet" />
-}
-
 @model Pizza;
 <h1 class="text-center display-3">@Model.Name Details</h1>
 
 <div class="container-fluid">
-    <div class="card">
+    <div class="card wrapper">
         <img src="@Model.ImgPath" class="card-img-top img-fluid pizza-img" alt="ceci n'est past une pizza">
       <div class="card-body">
-        <h5 class="card-title">@Model.Name</h5>
+        <h5 class="card-title" id="pizza-name">@Model.Name</h5>
         <p class="card-text">@Model.Description</p>
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item"> <span class="fs-6">&euro;</span>@Model.Price</li>
-            @if(Model.ImgPath != "")
-            {
-                <li class="list-group-item"><span class="fs-6">Image Path: </span>@Model.ImgPath</li>
-            }
-            <li class="list-group-item"><span class="fs-6">Slug: </span>@Model.Slug</li>
+        <li class="list-group-item"> <span class="fs-6">&euro;</span>@Model.Price</li>
+        <li class="list-group-item"><span class="fs-6">Image Path: </span>@Model.ImgPath</li>
+        <li class="list-group-item"><span class="fs-6">Slug: </span>@Model.Slug</li>
       </ul>
       <div class="card-body d-flex justify-content-center g-3">
         <a href="@Url.Action("Edit","Pizza", new {slug = Model.Slug})" class="btn btn-warning px-3 me-2">
