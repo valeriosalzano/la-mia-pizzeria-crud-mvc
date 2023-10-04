@@ -1,14 +1,14 @@
 ﻿@{
     Layout = "Admin/_Layout";
 }
-@model Pizza
+@model PizzaFormModel
 
 <h1 class="text-center display-3">Edit Pizza</h1>
 
 <form asp-action="Edit" method="post">
     @Html.AntiForgeryToken()
 
-    <input type="hidden" asp-for="PizzaId">
+    <input type="hidden" asp-for="Pizza.PizzaId">
     <partial name="Admin/Partials/_PizzaFields" model="Model"/>
 
     <div class="text-center">

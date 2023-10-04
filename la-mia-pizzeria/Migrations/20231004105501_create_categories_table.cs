@@ -17,16 +17,16 @@ namespace la_mia_pizzeria.Migrations
                 nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "categories",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.id);
+                    table.PrimaryKey("PK_categories", x => x.id);
                 });
 
             migrationBuilder.CreateIndex(
@@ -35,10 +35,10 @@ namespace la_mia_pizzeria.Migrations
                 column: "category_id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_pizzas_Categories_category_id",
+                name: "FK_pizzas_categories_category_id",
                 table: "pizzas",
                 column: "category_id",
-                principalTable: "Categories",
+                principalTable: "categories",
                 principalColumn: "id");
         }
 
@@ -46,11 +46,11 @@ namespace la_mia_pizzeria.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_pizzas_Categories_category_id",
+                name: "FK_pizzas_categories_category_id",
                 table: "pizzas");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "categories");
 
             migrationBuilder.DropIndex(
                 name: "IX_pizzas_category_id",

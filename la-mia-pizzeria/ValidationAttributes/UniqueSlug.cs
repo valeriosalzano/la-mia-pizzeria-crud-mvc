@@ -13,6 +13,7 @@ namespace la_mia_pizzeria.ValidationAttributes
 
             using (PizzeriaContext db = new PizzeriaContext())
             {
+                // TODO FIX EDIT
                 Pizza? foundPizza = db.Pizzas.Where(p => p.Slug == parsedValue).FirstOrDefault();
 
                 if (foundPizza is not null)

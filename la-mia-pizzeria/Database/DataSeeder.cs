@@ -40,6 +40,15 @@ namespace la_mia_pizzeria.Database
                     }
                 }
 
+                int testCategory = db.Categories.Count();
+                if (testCategory == 0)
+                {
+                    db.Add(new Category { Name = "Classics" });
+                    db.Add(new Category { Name = "Specialty" });
+                    db.Add(new Category { Name = "Innovations" });
+                    db.Add(new Category { Name = "Appetizers" });
+                }
+
                 db.SaveChanges();
             }
         }

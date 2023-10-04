@@ -26,7 +26,7 @@ namespace la_mia_pizzeria.Controllers
         {
             try
             {
-                List<Pizza> pizzas = _database.Pizzas.ToList<Pizza>();
+                List<Pizza> pizzas = _database.Pizzas.Include(p => p.Category).ToList<Pizza>();
                 return View("Index", pizzas);
             }
             catch
@@ -41,7 +41,7 @@ namespace la_mia_pizzeria.Controllers
         {
             try
             {
-                Pizza? pizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).Include("Category").FirstOrDefault();
+                Pizza? pizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).Include(pizza => pizza.Category).FirstOrDefault();
 
                 if (pizza is null)
                 {
@@ -62,10 +62,18 @@ namespace la_mia_pizzeria.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            List<Category> categories = _database.Categories.ToList();
+            try
+            {
+                List<Category> categories = _database.Categories.ToList();
+                PizzaFormModel formModel = new PizzaFormModel { Pizza = new Pizza(), Categories = categories };
 
-            PizzaFormModel model = new PizzaFormModel { Pizza = new Pizza(), Categories = categories };
-            return View("Create", model);
+                return View("Create", formModel);
+            }
+            catch
+            {
+                _logger.WriteLog($"Catching exception at GET Pizza>Create");
+                return NotFound();
+            }
         }
 
         // POST: PizzaController/Create
@@ -88,7 +96,7 @@ namespace la_mia_pizzeria.Controllers
             }
             catch
             {
-                _logger.WriteLog($"Catching exception at Pizza>Create");
+                _logger.WriteLog($"Catching exception at POST Pizza>Create");
                 return NotFound();
             }
         }
@@ -98,19 +106,23 @@ namespace la_mia_pizzeria.Controllers
         {
             try
             {
-                Pizza? pizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).FirstOrDefault();
+                Pizza? pizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).Include(pizza => pizza.Category).FirstOrDefault();
 
                 if (pizza is null)
                 {
-                    _logger.WriteLog($"Catching a null reference at Pizza>Edit>{slug}");
+                    _logger.WriteLog($"Catching a null reference at GET Pizza>Edit>{slug}");
                     return NotFound("Can't find the pizza.");
                 }
                 else
-                    return View(nameof(Edit),pizza);
+                {
+                    List<Category> categories = _database.Categories.ToList();
+                    PizzaFormModel formModel = new PizzaFormModel { Pizza = pizza, Categories = categories };
+                    return View(nameof(Edit),formModel);
+                }
             }
             catch
             {
-                _logger.WriteLog($"Catching exception at GET Pizza>Edit{slug}");
+                _logger.WriteLog($"Catching exception at GET Pizza>Edit>{slug}");
                 return NotFound();
             }
         }
@@ -131,7 +143,7 @@ namespace la_mia_pizzeria.Controllers
                 }
                 Pizza originalPizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).First();
                 EntityEntry<Pizza> originalPizzaEntity = _database.Entry(originalPizza);
-                originalPizzaEntity.CurrentValues.SetValues(formData);
+                originalPizzaEntity.CurrentValues.SetValues(formData.Pizza);
                 _database.SaveChanges();
                 return RedirectToAction(nameof(Details), new {slug = formData.Pizza.Slug});
             }

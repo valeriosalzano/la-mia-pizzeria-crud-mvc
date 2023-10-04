@@ -5,30 +5,30 @@
 @model Pizza;
 <h1 class="text-center display-3">@Model.Name Details</h1>
 
-<div class="container-fluid">
-    <div class="card wrapper">
+<div class="container-fluid py-3">
+    <div class="card wrapper shadow">
         <img src="@Model.ImgPath" class="card-img-top img-fluid pizza-img" alt="ceci n'est past une pizza">
       <div class="card-body">
         <h5 class="card-title" id="pizza-name">@Model.Name</h5>
         <p class="card-text">@Model.Description</p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"> <span class="fs-6">&euro;</span>@Model.Price</li>
-        <li class="list-group-item"> <span class="fs-6">&euro;</span>@Model.Price</li>
-        <li class="list-group-item"><span class="fs-6">Image Path: </span>@Model.ImgPath</li>
+        <li class="list-group-item"> <span class="fs-6">Price: &euro;</span>@Model.Price</li>
+        <li class="list-group-item"> <span class="fs-6">Category: </span>@(string.IsNullOrEmpty(Model.Category?.Name) ? "N/N" : Model.Category?.Name)</li>
+        <li class="list-group-item"><span class="fs-6">Image Path: </span>@(Model.ImgPath == "" ? "N/N" : Model.ImgPath)</li>
         <li class="list-group-item"><span class="fs-6">Slug: </span>@Model.Slug</li>
       </ul>
-      <div class="card-body d-flex justify-content-center g-3">
-        <a href="@Url.Action("Edit","Pizza", new {slug = Model.Slug})" class="btn btn-warning px-3 me-2">
+      <div class="card-body d-flex justify-content-center">
+        <a class="btn btn-primary me-2" href="@Url.Action("Index","Pizza")">Return to List</a>
+        <a href="@Url.Action("Edit","Pizza", new {slug = Model.Slug})" class="btn btn-warning px-2 me-2">
             Modify <i class="fa-solid fa-pen-to-square"></i>
         </a>
         <form asp-action="Delete" asp-route-slug="@Model.Slug" method="post">
             @Html.AntiForgeryToken()
-            <button type="submit" class="btn btn-danger btn-sweet-delete px-3 me-2">
+            <button type="submit" class="btn btn-danger btn-sweet-delete px-2 me-2">
                 Delete <i class="fa-solid fa-trash"></i>
             </button>
         </form>
-        <a class="btn btn-primary" href="@Url.Action("Index","Pizza")">Return to List</a>
       </div>
     </div>
 </div>

@@ -12,17 +12,18 @@
     <span class="invalid-feedback d-inline" asp-validation-for="Pizza.Price"></span>
 </div>
 <div class="mb-3">
-    <label asp-for="Pizza.Price" class="form-label">Price</label>
+    <label asp-for="Pizza.CategoryId" class="form-label">Category</label>
     <select asp-for="Pizza.CategoryId" rows="10" class="w-100">
+        <option value="">Choose a category</option>
         @foreach (Category category in Model.Categories)
         {
             @if (Model.Pizza.CategoryId == category.CategoryId)
             {
-                <option selected > @category.Name </option>
+                <option selected value="@category.CategoryId" > @category.Name </option>
             }
             else
             {
-                <option > @category.Name </option>
+                <option value="@category.CategoryId"> @category.Name </option>
             }
         }
     </select>

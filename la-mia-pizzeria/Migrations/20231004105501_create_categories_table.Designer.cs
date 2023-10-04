@@ -12,7 +12,7 @@ using la_mia_pizzeria.Database;
 namespace la_mia_pizzeria.Migrations
 {
     [DbContext(typeof(PizzeriaContext))]
-    [Migration("20231004094841_create_categories_table")]
+    [Migration("20231004105501_create_categories_table")]
     partial class create_categories_table
     {
         /// <inheritdoc />
@@ -37,11 +37,12 @@ namespace la_mia_pizzeria.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("name");
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("categories");
                 });
 
             modelBuilder.Entity("la_mia_pizzeria.Models.Pizza", b =>
