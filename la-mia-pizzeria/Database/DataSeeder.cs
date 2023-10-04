@@ -14,6 +14,16 @@ namespace la_mia_pizzeria.Database
             {
                 db.Database.EnsureCreated();
 
+                int testCategory = db.Categories.Count();
+                if (testCategory == 0)
+                {
+                    db.Add(new Category { Name = "Classics" });
+                    db.Add(new Category { Name = "Specialty" });
+                    db.Add(new Category { Name = "Innovations" });
+                    db.Add(new Category { Name = "Appetizers" });
+                }
+                db.SaveChanges();
+
                 int testPizza = db.Pizzas.Count();
                 if (testPizza == 0)
                 {
@@ -39,16 +49,6 @@ namespace la_mia_pizzeria.Database
                         }
                     }
                 }
-
-                int testCategory = db.Categories.Count();
-                if (testCategory == 0)
-                {
-                    db.Add(new Category { Name = "Classics" });
-                    db.Add(new Category { Name = "Specialty" });
-                    db.Add(new Category { Name = "Innovations" });
-                    db.Add(new Category { Name = "Appetizers" });
-                }
-
                 db.SaveChanges();
             }
         }
@@ -62,7 +62,7 @@ namespace la_mia_pizzeria.Database
             {
                 if (rowCounter > 0)
                 {
-                    if (row.Length != 3)
+                    if (row.Length != 4)
                     {
                         Debug.WriteLine("Wrong format. Row " + rowCounter);
                     }
@@ -70,7 +70,14 @@ namespace la_mia_pizzeria.Database
                     {
                         try
                         {
-                            pizzasList.Add(new Pizza { Name = row[0], Slug = Helper.GetSlugFromString(row[0]), Price = decimal.Parse(row[1]), Description = row[2]  });
+                            pizzasList.Add(new Pizza { 
+                                Name = row[0], 
+                                Slug = Helper.GetSlugFromString(row[0]), 
+                                Price = decimal.Parse(row[1]), 
+                                Description = row[2], 
+                                CategoryId = int.Parse(row[3]),
+                                ImgPath = ""
+                            });
                         }
                         catch (Exception ex)
                         {

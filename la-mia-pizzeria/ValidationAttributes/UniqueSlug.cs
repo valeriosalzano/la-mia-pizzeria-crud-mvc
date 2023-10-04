@@ -10,17 +10,16 @@ namespace la_mia_pizzeria.ValidationAttributes
         {
             value ??= "";
             string parsedValue = (string)value;
+            Pizza? evaluatedPizza = validationContext.ObjectInstance as Pizza;
 
             using (PizzeriaContext db = new PizzeriaContext())
             {
                 // TODO FIX EDIT
                 Pizza? foundPizza = db.Pizzas.Where(p => p.Slug == parsedValue).FirstOrDefault();
-
-                if (foundPizza is not null)
+                
+                if (foundPizza is not null && foundPizza.PizzaId != evaluatedPizza?.PizzaId)
                     return new ValidationResult($"A slug for this name already exists, choose a different name.");
             }
-
-
             return ValidationResult.Success;
         }
     }
