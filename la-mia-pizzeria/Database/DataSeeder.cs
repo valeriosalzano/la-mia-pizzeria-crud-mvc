@@ -24,10 +24,14 @@ namespace la_mia_pizzeria.Database
                     db.Add(new Category { Name = "Appetizers" });
                 }
                 db.SaveChanges();
-                #endregion
-                #region CHECK INGREDIENTS TABLE
+            }
+            #endregion
+            #region CHECK INGREDIENTS TABLE
+            using (PizzeriaContext db = new PizzeriaContext())
+            {
+                db.Database.EnsureCreated();
                 int testIngredient = db.Ingredients.Count();
-                if(testIngredient == 0)
+                if (testIngredient == 0)
                 {
                     // GET FILE CONTENT
                     string filePath = Path.GetFullPath(@"./Database/Seeder/ingredients.csv");
@@ -51,9 +55,12 @@ namespace la_mia_pizzeria.Database
                     }
                     db.SaveChanges();
                 }
-
-                #endregion
-                #region CHECK PIZZAS TABLE
+            }
+            #endregion
+            #region CHECK PIZZAS TABLE
+            using (PizzeriaContext db = new PizzeriaContext())
+            {
+                db.Database.EnsureCreated();
                 int testPizza = db.Pizzas.Count();
                 if (testPizza == 0)
                 {
@@ -64,22 +71,28 @@ namespace la_mia_pizzeria.Database
                     // PARSING TO PIZZAS
                     List<Pizza> pizzasList = GetPizzasFromFile(fileContent);
 
-                    using (PizzeriaContext db2 = new PizzeriaContext())
+                    try
                     {
-                        try
+                        int pizzacounter = 1;
+                        foreach (Pizza pizza in pizzasList)
                         {
-                            foreach (Pizza pizza in pizzasList)
+                            Debug.WriteLine($"Adding {pizza.Name} pizza.");
+
+                            string[] ingredientsIds = fileContent[pizzacounter][4].Split(",");
+                            foreach (string ingredientId in ingredientsIds)
                             {
-                                Debug.WriteLine($"Adding {pizza.Name} pizza.");
-                                db2.Add(pizza);
+                                Ingredient ingredient = db.Ingredients.Where(i => i.IngredientId == int.Parse(ingredientId)).First();
+                                pizza.Ingredients?.Add(ingredient);
                             }
-                            db2.SaveChanges();
+                            db.Add(pizza);
+                            db.SaveChanges();
+                            pizzacounter++;
                         }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine(ex.Message);
-                            Debug.WriteLine(ex.InnerException);
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                        Debug.WriteLine(ex.InnerException);
                     }
                     db.SaveChanges();
                 }
@@ -112,18 +125,9 @@ namespace la_mia_pizzeria.Database
                                 Price = decimal.Parse(row[1]),
                                 Description = row[2],
                                 CategoryId = int.Parse(row[3]),
+                                Ingredients = new List<Ingredient>(),
                                 ImgPath = "",
-
                             };
-                            //string[] ingredientsIds = row[4].Split(",");
-                            //foreach (string ingredientId in ingredientsIds)
-                            //{
-                            //    using (PizzeriaContext db = new PizzeriaContext())
-                            //    {
-                            //        Ingredient? ingredient = db.Ingredients.Where(i => i.IngredientId == int.Parse(ingredientId)).FirstOrDefault();
-                            //        newPizza.Ingredients.Add(ingredient);
-                            //    }
-                            //}
 
                             pizzasList.Add(newPizza);
                         }
