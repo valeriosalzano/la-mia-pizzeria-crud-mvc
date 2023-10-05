@@ -15,6 +15,19 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item"> <span class="fs-6">Price: &euro;</span>@Model.Price</li>
         <li class="list-group-item"> <span class="fs-6">Category: </span>@(string.IsNullOrEmpty(Model.Category?.Name) ? "N/N" : Model.Category?.Name)</li>
+        <li class="list-group-item"><span class="fs-6">Ingredients: </span>
+            @if (Model.Ingredients is not null && Model.Ingredients.Count > 0)
+            {
+                @foreach(Ingredient ingredient in Model.Ingredients)
+                {
+                    <span class="rounded-pill bg-primary">@ingredient.Name</span>
+                }
+            }
+            else
+            {
+                <span>No ingredients found.</span>
+            }
+        </li>
         <li class="list-group-item"><span class="fs-6">Image Path: </span>@(Model.ImgPath == "" ? "N/N" : Model.ImgPath)</li>
         <li class="list-group-item"><span class="fs-6">Slug: </span>@Model.Slug</li>
       </ul>

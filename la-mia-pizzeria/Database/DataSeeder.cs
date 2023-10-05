@@ -14,6 +14,7 @@ namespace la_mia_pizzeria.Database
             {
                 db.Database.EnsureCreated();
 
+                #region CHECK CATEGORY TABLE
                 int testCategory = db.Categories.Count();
                 if (testCategory == 0)
                 {
@@ -23,24 +24,24 @@ namespace la_mia_pizzeria.Database
                     db.Add(new Category { Name = "Appetizers" });
                 }
                 db.SaveChanges();
-
-                int testPizza = db.Pizzas.Count();
-                if (testPizza == 0)
+                #endregion
+                #region CHECK INGREDIENTS TABLE
+                int testIngredient = db.Ingredients.Count();
+                if(testIngredient == 0)
                 {
                     // GET FILE CONTENT
-                    string filePath = Path.GetFullPath(@"./Database/Seeder/pizzas.csv");
+                    string filePath = Path.GetFullPath(@"./Database/Seeder/ingredients.csv");
                     List<string[]> fileContent = Helper.GetCSVContent(filePath, ";");
 
-                    // PARSING TO ADDRESSES
-                    List<Pizza> pizzasList = GetPizzasFromFile(fileContent);
+                    // PARSING TO INGREDIENTS
+                    List<Ingredient> ingredientsList = GetIngredientsFromFile(fileContent);
 
-                    foreach(Pizza pizza in pizzasList)
+                    foreach (Ingredient ingredient in ingredientsList)
                     {
-                        Debug.WriteLine($"Adding {pizza.Name} pizza.");
+                        Debug.WriteLine($"Adding {ingredient.Name} ingredient.");
                         try
                         {
-                            db.Add(pizza);
-                            db.SaveChanges();
+                            db.Add(ingredient);
                         }
                         catch (Exception ex)
                         {
@@ -48,8 +49,41 @@ namespace la_mia_pizzeria.Database
                             Debug.WriteLine(ex.InnerException);
                         }
                     }
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
+
+                #endregion
+                #region CHECK PIZZAS TABLE
+                int testPizza = db.Pizzas.Count();
+                if (testPizza == 0)
+                {
+                    // GET FILE CONTENT
+                    string filePath = Path.GetFullPath(@"./Database/Seeder/pizzas.csv");
+                    List<string[]> fileContent = Helper.GetCSVContent(filePath, ";");
+
+                    // PARSING TO PIZZAS
+                    List<Pizza> pizzasList = GetPizzasFromFile(fileContent);
+
+                    using (PizzeriaContext db2 = new PizzeriaContext())
+                    {
+                        try
+                        {
+                            foreach (Pizza pizza in pizzasList)
+                            {
+                                Debug.WriteLine($"Adding {pizza.Name} pizza.");
+                                db2.Add(pizza);
+                            }
+                            db2.SaveChanges();
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
+                            Debug.WriteLine(ex.InnerException);
+                        }
+                    }
+                    db.SaveChanges();
+                }
+                #endregion
             }
         }
 
@@ -62,7 +96,7 @@ namespace la_mia_pizzeria.Database
             {
                 if (rowCounter > 0)
                 {
-                    if (row.Length != 4)
+                    if (row.Length != 5)
                     {
                         Debug.WriteLine("Wrong format. Row " + rowCounter);
                     }
@@ -70,14 +104,28 @@ namespace la_mia_pizzeria.Database
                     {
                         try
                         {
-                            pizzasList.Add(new Pizza { 
-                                Name = row[0], 
-                                Slug = Helper.GetSlugFromString(row[0]), 
-                                Price = decimal.Parse(row[1]), 
-                                Description = row[2], 
+
+                            Pizza newPizza = new Pizza
+                            {
+                                Name = row[0],
+                                Slug = Helper.GetSlugFromString(row[0]),
+                                Price = decimal.Parse(row[1]),
+                                Description = row[2],
                                 CategoryId = int.Parse(row[3]),
-                                ImgPath = ""
-                            });
+                                ImgPath = "",
+
+                            };
+                            //string[] ingredientsIds = row[4].Split(",");
+                            //foreach (string ingredientId in ingredientsIds)
+                            //{
+                            //    using (PizzeriaContext db = new PizzeriaContext())
+                            //    {
+                            //        Ingredient? ingredient = db.Ingredients.Where(i => i.IngredientId == int.Parse(ingredientId)).FirstOrDefault();
+                            //        newPizza.Ingredients.Add(ingredient);
+                            //    }
+                            //}
+
+                            pizzasList.Add(newPizza);
                         }
                         catch (Exception ex)
                         {
@@ -89,6 +137,40 @@ namespace la_mia_pizzeria.Database
                 rowCounter++;
             }
             return pizzasList;
+        }
+
+        public static List<Ingredient> GetIngredientsFromFile(List<string[]> fileContent)
+        {
+            List<Ingredient> ingredientsList = new List<Ingredient>();
+
+            int rowCounter = 0;
+            foreach (string[] row in fileContent)
+            {
+                if (rowCounter > 0)
+                {
+                    if (row.Length != 2)
+                    {
+                        Debug.WriteLine("Wrong format. Row " + rowCounter);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            ingredientsList.Add(new Ingredient
+                            {
+                                Name = row[1],
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Could not create an ingredient with row {rowCounter} data.");
+                            Debug.WriteLine(ex.Message);
+                        }
+                    }
+                }
+                rowCounter++;
+            }
+            return ingredientsList;
         }
     }
 }

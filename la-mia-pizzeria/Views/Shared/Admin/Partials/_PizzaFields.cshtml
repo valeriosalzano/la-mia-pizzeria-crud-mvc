@@ -11,23 +11,27 @@
     <input type="number" step="0.01" class="form-control" asp-for="Pizza.Price">
     <span class="invalid-feedback d-inline" asp-validation-for="Pizza.Price"></span>
 </div>
-<div class="mb-3">
-    <label asp-for="Pizza.CategoryId" class="form-label">Category</label>
-    <select asp-for="Pizza.CategoryId" rows="10" class="w-100">
-        <option value="">Choose a category</option>
-        @foreach (Category category in Model.Categories)
-        {
-            @if (Model.Pizza.CategoryId == category.CategoryId)
+@if (Model.Categories is not null)
+{
+    <div class="mb-3">
+        <label asp-for="Pizza.CategoryId" class="form-label">Category</label>
+        <select asp-for="Pizza.CategoryId" class="w-100 form-select">
+            <option value="">Choose a category</option>
+            @foreach (Category category in Model.Categories)
             {
-                <option selected value="@category.CategoryId" > @category.Name </option>
+                <option selected="@(Model.Pizza.CategoryId == category.CategoryId)" value="@category.CategoryId"> @category.Name </option>
             }
-            else
-            {
-                <option value="@category.CategoryId"> @category.Name </option>
-            }
-        }
-    </select>
-</div>
+        </select>
+    </div>
+}
+@if (Model.Ingredients is not null)
+{
+    <div class="mb-3">
+        <label asp-for="SelectedIngredientsId" class="mb-1"> Select tags:</label>
+        <select class="w-100 form-select" asp-for="SelectedIngredientsId" multiple="true" size="5" asp-items="@Model.Ingredients"></select>
+
+    </div>
+}
 <div class="mb-3">
     <label asp-for="Pizza.Description" class="form-label">Description</label>
     <textarea class="form-control" asp-for="Pizza.Description" rows="3" placeholder="Write a pizza description..."></textarea>

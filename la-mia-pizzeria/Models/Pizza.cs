@@ -12,6 +12,8 @@ namespace la_mia_pizzeria.Models
     [Table("pizzas"), Index(nameof(Slug), IsUnique = true)]
     public class Pizza
     {
+        #region *** Table Columns ***
+
         [Column(name:"id"), Key]
         public int PizzaId { get; set; }
 
@@ -32,6 +34,11 @@ namespace la_mia_pizzeria.Models
 
         [Column(name: "category_id")]
         public int? CategoryId { get; set; }
+        #endregion
+
+        #region *** Relations ***
         public Category? Category { get; set; }
+        public List<Ingredient>? Ingredients { get; set; }
+        #endregion
     }
 }

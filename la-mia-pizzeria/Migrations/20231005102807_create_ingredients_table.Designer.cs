@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using la_mia_pizzeria.Database;
 
@@ -11,9 +12,11 @@ using la_mia_pizzeria.Database;
 namespace la_mia_pizzeria.Migrations
 {
     [DbContext(typeof(PizzeriaContext))]
-    partial class PizzeriaContextModelSnapshot : ModelSnapshot
+    [Migration("20231005102807_create_ingredients_table")]
+    partial class create_ingredients_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace la_mia_pizzeria.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("IngredientPizza", b =>
-                {
-                    b.Property<int>("IngredientsIngredientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PizzaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("IngredientsIngredientId", "PizzaId");
-
-                    b.HasIndex("PizzaId");
-
-                    b.ToTable("IngredientPizza");
-                });
 
             modelBuilder.Entity("la_mia_pizzeria.Models.Category", b =>
                 {
@@ -121,21 +109,6 @@ namespace la_mia_pizzeria.Migrations
                         .IsUnique();
 
                     b.ToTable("pizzas");
-                });
-
-            modelBuilder.Entity("IngredientPizza", b =>
-                {
-                    b.HasOne("la_mia_pizzeria.Models.Ingredient", null)
-                        .WithMany()
-                        .HasForeignKey("IngredientsIngredientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("la_mia_pizzeria.Models.Pizza", null)
-                        .WithMany()
-                        .HasForeignKey("PizzaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("la_mia_pizzeria.Models.Pizza", b =>

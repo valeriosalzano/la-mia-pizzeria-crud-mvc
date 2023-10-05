@@ -1,4 +1,6 @@
-﻿namespace la_mia_pizzeria.Utility
+﻿using System.Text.RegularExpressions;
+
+namespace la_mia_pizzeria.Utility
 {
     public static class Helper
     {
@@ -48,11 +50,8 @@
             else
             {
                 //TODO function with REGEX
-                s = s.Replace("#", "");
-                s = s.Replace(".", "");
-                s = s.Replace("/", "");
-                s = s.Replace("\\", "");
-                return s.Replace(" ", "-").ToLower();
+                string output = Regex.Replace(s, "[^A-Za-z0-9 ]", "");
+                return Regex.Replace(output, @"\s+", "-").ToLower();
             }
         }
     }

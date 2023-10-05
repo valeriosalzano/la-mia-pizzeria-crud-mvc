@@ -1,11 +1,11 @@
-Name;Price;Funny Description;Category
-C# Supreme;15,99;This pizza is so object-oriented,  even your taste buds will inherit deliciousness.;1
-DotNet Delight;14,49;It's like a perfectly compiled symphony of flavors in every byte-sized bite.;3
-Exceptional Pepperoni;13,99;Our pepperoni slices are as rare as a null reference exception in a well-written code.;1
-.NET Margherita;12,99;Just like the .NET framework,  this pizza is a classic that never goes out of style.;1
-Async Hawaiian;16,49;Each bite is an asynchronous journey to a tropical paradise of taste.;2
-Garlic Bread Code;11,99;A crunchy crust with a code snippet of garlic goodness baked right in.;4
-Polymorphic Pesto;14,99;This pizza adapts to your taste preferences like a true polymorphic masterpiece.;3
-Database Double Cheese;17,49;Double the cheese,  just like doubling down on a robust database architecture.;2
-Crispy Compiler;12,49;A compiler error never tasted this good - crispy and full of flavor.;3
-DotNet Dessert;9,99;Finish your coding session with a sweet slice of DotNet magic.;4
+Name;Price;Funny Description;Category;Ingredients
+C# Supreme;15,99;This pizza is so object-oriented, even your taste buds will inherit deliciousness;1;1,2,3,4,5
+DotNet Delight;14,49;It's like a perfectly compiled symphony of flavors in every byte-sized bite;3;6,7,8,9,10
+Exceptional Pepperoni;13,99;Our pepperoni slices are as rare as a null reference exception in a well-written code;1;11,12,13,4,14
+.NET Margherita;12,99;Just like the .NET framework, this pizza is a classic that never goes out of style;1;15,16,17,18
+Async Hawaiian;16,49;Each bite is an asynchronous journey to a tropical paradise of taste;2;19,20,21,4,22
+Garlic Bread Code;11,99;A crunchy crust with a code snippet of garlic goodness baked right in;4;23,24,4,25
+Polymorphic Pesto;14,99;This pizza adapts to your taste preferences like a true polymorphic masterpiece;3;6,26,27,17,28
+Database Double Cheese;17,49;Double the cheese, just like doubling down on a robust database architecture;2;29,30,31,32,33
+Crispy Compiler;12,49;A compiler error never tasted this good, crispy and full of flavor;3;34,35,36,25,37
+DotNet Dessert;9,99;Finish your coding session with a sweet slice of DotNet magic;4;38,39,40,41,42
