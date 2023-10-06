@@ -10,11 +10,11 @@ namespace la_mia_pizzeria.Database
     {
         public static void PopulateDb()
         {
+            #region CHECK CATEGORY TABLE
             using (PizzeriaContext db = new PizzeriaContext())
             {
                 db.Database.EnsureCreated();
 
-                #region CHECK CATEGORY TABLE
                 int testCategory = db.Categories.Count();
                 if (testCategory == 0)
                 {
@@ -96,8 +96,8 @@ namespace la_mia_pizzeria.Database
                     }
                     db.SaveChanges();
                 }
-                #endregion
             }
+            #endregion
         }
 
         public static List<Pizza> GetPizzasFromFile(List<string[]> fileContent)

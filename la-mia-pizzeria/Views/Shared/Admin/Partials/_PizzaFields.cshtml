@@ -28,6 +28,7 @@
 {
     <div class="mb-3">
         <label asp-for="SelectedIngredientsId" class="mb-1"> Select tags:</label>
+        <input type="text" class="form-control w-100 mb-2" id="ingredients-filter-input" placeholder="Cerca ingredienti...">
         <select class="w-100 form-select" asp-for="SelectedIngredientsId" multiple="true" size="5" asp-items="@Model.Ingredients"></select>
 
     </div>

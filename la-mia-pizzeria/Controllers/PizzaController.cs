@@ -160,7 +160,7 @@ namespace la_mia_pizzeria.Controllers
                             {
                                 Text = ingredient.Name,
                                 Value = ingredient.IngredientId.ToString(),
-                                Selected = pizza.Ingredients.Any(pizzaIngredient => pizzaIngredient.IngredientId == ingredient.IngredientId )
+                                Selected = pizza.Ingredients!.Any(pizzaIngredient => pizzaIngredient.IngredientId == ingredient.IngredientId )
                             });
                     }
                     List<Category> categories = _database.Categories.ToList();
@@ -198,7 +198,7 @@ namespace la_mia_pizzeria.Controllers
 
                 Pizza originalPizza = _database.Pizzas.Where(pizza => pizza.Slug == slug).Include(pizza => pizza.Ingredients).First();
 
-                originalPizza.Ingredients.Clear();
+                originalPizza.Ingredients!.Clear();
 
                 if (formData.SelectedIngredientsId != null)
                 {
