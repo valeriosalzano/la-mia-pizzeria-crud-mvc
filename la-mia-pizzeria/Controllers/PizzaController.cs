@@ -10,9 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.SqlServer.Server;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 
 namespace la_mia_pizzeria.Controllers
 {
+    [Authorize(Roles = "ADMIN,USER")]
     public class PizzaController : Controller
     {
         private readonly ICustomLogger _logger;
@@ -23,7 +25,9 @@ namespace la_mia_pizzeria.Controllers
             _logger = logger;
             _database = db;
         }
+
         // GET: PizzaController
+        [Authorize]
         public ActionResult Index()
         {
             try
@@ -64,29 +68,16 @@ namespace la_mia_pizzeria.Controllers
         }
 
         // GET: PizzaController/Create
+        [Authorize(Roles = "ADMIN")]
         [HttpGet]
         public ActionResult Create()
         {
             try
             {
-                List<SelectListItem> ingredientsSelectList = new List<SelectListItem>();
-                List<Ingredient> ingredients = _database.Ingredients.ToList<Ingredient>();
-                foreach(Ingredient ingredient in ingredients)
-                {
-                    ingredientsSelectList.Add(
-                        new SelectListItem
-                        {
-                            Text = ingredient.Name,
-                            Value = ingredient.IngredientId.ToString(),
-                        });
-                }
-                List<Category> categories = _database.Categories.ToList();
-
                 PizzaFormModel formModel = new PizzaFormModel {
                     Pizza = new Pizza(),
-                    Categories = categories,
-                    Ingredients = ingredientsSelectList
                 };
+                PrepareFormModel( formModel );
 
                 return View("Create", formModel);
             }
@@ -98,6 +89,7 @@ namespace la_mia_pizzeria.Controllers
         }
 
         // POST: PizzaController/Create
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(PizzaFormModel formData)
@@ -135,6 +127,7 @@ namespace la_mia_pizzeria.Controllers
         }
 
         // GET: PizzaController/Edit/pizza-slug
+        [Authorize(Roles = "ADMIN")]
         public ActionResult Edit(string slug)
         {
             try
@@ -151,26 +144,9 @@ namespace la_mia_pizzeria.Controllers
                 }
                 else
                 {
-                    List<SelectListItem> ingredientsSelectList = new List<SelectListItem>();
-                    List<Ingredient> ingredients = _database.Ingredients.ToList<Ingredient>();
-                    foreach (Ingredient ingredient in ingredients)
-                    {
-                        ingredientsSelectList.Add(
-                            new SelectListItem
-                            {
-                                Text = ingredient.Name,
-                                Value = ingredient.IngredientId.ToString(),
-                                Selected = pizza.Ingredients!.Any(pizzaIngredient => pizzaIngredient.IngredientId == ingredient.IngredientId )
-                            });
-                    }
-                    List<Category> categories = _database.Categories.ToList();
+                    PizzaFormModel formModel = new PizzaFormModel{ Pizza = pizza };
+                    PrepareFormModel( formModel );
 
-                    PizzaFormModel formModel = new PizzaFormModel
-                    {
-                        Pizza = pizza,
-                        Categories = categories,
-                        Ingredients = ingredientsSelectList
-                    };
                     return View(nameof(Edit),formModel);
                 }
             }
@@ -182,6 +158,7 @@ namespace la_mia_pizzeria.Controllers
         }
 
         // POST: PizzaController/Edit/pizza-slug
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(string slug, PizzaFormModel formData)
@@ -227,6 +204,7 @@ namespace la_mia_pizzeria.Controllers
         }
 
         // POST: PizzaController/Delete/pizza-slug
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(string slug)
@@ -246,6 +224,7 @@ namespace la_mia_pizzeria.Controllers
         }
 
         // POST: PizzaController/PopulateDb
+        [Authorize(Roles = "ADMIN")]
         public ActionResult PopulateDb()
         {
             try
@@ -273,7 +252,7 @@ namespace la_mia_pizzeria.Controllers
 
             // INGREDIENTS LIST
             List<SelectListItem> selectIngredients = new List<SelectListItem>();
-            List<Ingredient> dbIngredients = _database.Ingredients.ToList();
+            List<Ingredient> dbIngredients = _database.Ingredients.OrderBy(ingredient => ingredient.Name).ToList();
             foreach (Ingredient ingredient in dbIngredients)
             {
                 selectIngredients.Add(new SelectListItem { Text = ingredient.Name, Value = ingredient.IngredientId.ToString() });

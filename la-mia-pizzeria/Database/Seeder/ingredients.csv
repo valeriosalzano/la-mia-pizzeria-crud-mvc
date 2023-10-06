@@ -1,4 +1,4 @@
-id;Name
+IngredientId;IngredientName
 1;Crispy Crust
 2;Savory Tomato Sauce
 3;Pepperoni
@@ -12,7 +12,7 @@ id;Name
 11;Classic Crust
 12;Rich Tomato Sauce
 13;Extra Pepperoni
-14;Red Onions
+14;Red Onions (Sliced)
 15;Fresh Tomato Slices
 16;Fresh Basil
 17;Fresh Mozzarella Cheese
@@ -34,11 +34,9 @@ id;Name
 33;Bacon Bits
 34;BBQ Sauce
 35;Grilled Chicken
-36;Red Onions
-37;Jalapeños
-38;Sweet Dough
-39;Chocolate Sauce
-40;Marshmallows
-41;Graham Cracker Crumbs
-42;Caramel Drizzle
-
+36;Jalapeños
+37;Sweet Dough
+38;Chocolate Sauce
+39;Marshmallows
+40;Graham Cracker Crumbs
+41;Caramel Drizzle
