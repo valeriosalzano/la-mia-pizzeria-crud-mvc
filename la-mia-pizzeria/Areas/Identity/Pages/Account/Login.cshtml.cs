@@ -115,7 +115,7 @@ namespace la_mia_pizzeria.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect("/Pizza");
                 }
                 if (result.RequiresTwoFactor)
                 {

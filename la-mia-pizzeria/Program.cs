@@ -23,6 +23,10 @@ namespace la_mia_pizzeria_static
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<ICustomLogger, CustomFileLogger>();
             builder.Services.AddScoped<PizzeriaContext, PizzeriaContext>();
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Pizza";
+            });
 
             var app = builder.Build();
 
